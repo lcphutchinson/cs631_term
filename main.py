@@ -28,10 +28,20 @@ from app.models.consultant import Consultant
 from app.models.tax_record import TaxRecord
 from app.models.milestone import Milestone
 
-from app.schemas.consultant import AffiliationCreate 
-from app.schemas.employee import EmployeeUpdate, EmployeeVerboseRead, SafeEmployeeRead
-from app.schemas.office import OfficeCreate
-from app.schemas.project import SimpleProjectRead
+from app.schemas.consultant import AffiliationCreate, ConsultantCreate, ConsultantRead
+from app.schemas.building import BuildingCreate, BuildingRead, BuildingUpdate
+from app.schemas.department import DepartmentCreate, DepartmentRead, DepartmentUpdate
+from app.schemas.dept_emp import DepartmentEmployeeCreate, DepartmentEmployeeRead
+from app.schemas.division import DivisionCreate, DivisionRead, DivisionUpdate
+from app.schemas.employee import EmployeeCreate, EmployeeUpdate, EmployeeRead, EmployeeVerboseRead, SafeEmployeeRead
+from app.schemas.office import OfficeCreate, OfficeRead, OfficeUpdate
+from app.schemas.milestone import MilestoneCreate, MilestoneUpdate, MilestoneRead
+from app.schemas.project import SimpleProjectRead, ProjectCreate, ProjectRead, ProjectUpdate
+from app.schemas.proj_assignment import ProjectAssignmentCreate, ProjectAssignmentRead
+from app.schemas.room import RoomCreate, RoomRead, RoomUpdate
+from app.schemas.tax_records import TaxRecordCreate, TaxRecordRead
+from app.schemas.work_record import WorkRecordCreate, WorkRecordRead, WorkRecordUpdate
+
 
 # ------------
 # Setup

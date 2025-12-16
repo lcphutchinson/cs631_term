@@ -23,7 +23,7 @@ class MilestoneRead(BaseModel):
 class MilestoneUpdate(BaseModel):
     completed: Optional[bool] = Field(None, description="New completion status for this milestone")
     deadline: Optional[datetime] = Field(None, description="New deadline for this milestone")
-    description: Optional[string] = Field(None, min_length=1, max_length=140, description="New description for this milestone")
+    description: Optional[str] = Field(None, min_length=1, max_length=140, description="New description for this milestone")
 
     model_config = ConfigDict(from_attributes=True)
 

@@ -4,7 +4,7 @@ from datetime import datetime
 from pydantic import BaseModel, ConfigDict, Field
 from typing import Optional
 
-class WorKRecordCreate(BaseModel):
+class WorkRecordCreate(BaseModel):
     employee: int = Field(..., description="Employee# associated with this record")
     project: int = Field(..., description="Project# associated with this record")
     start_date: Optional[datetime] = Field(None, description="Date work begins")
