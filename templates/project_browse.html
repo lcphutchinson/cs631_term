@@ -1,0 +1,47 @@
+{% extends "layout.html" %}
+{% from "macros/entity_list.html" import entity_list %}
+
+{% block title %}Review Personnel{% endblock %}
+
+{% block content %}
+<div class="space-y-5">
+
+    <!-- Create Project -->
+    <a href="{{ url_for('project_create') }}"
+       class="block bg-white shadow-md rounded-lg p-6 border border-gray-100
+              hover:shadow-lg hover:border-blue-200 transition">
+      <h2 class="text-xl font-semibold text-gray-800 mb-1">
+        Create a Project
+      </h2>
+      <p class="text-gray-600">
+        Detail a new project for the team
+      </p>
+    </a>
+</div>
+<br>
+
+<div class="max-w-4xl mx-auto">
+  {{ entity_list(
+      id="projectList",
+      title="Projects",
+      empty_label="projects",
+      empty_hint="Create your first project to get started"
+  ) }}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  OrgDB.loadEntityList({
+    containerId: 'projectList',
+    apiUrl: '/api/projects',
+    title: e => `${e.name}`,
+    subtitle: e => e.deadline || "no deadline",
+    viewUrl: e => `/project/${e.num}`,
+    editUrl: e => `/project/${e.num}/edit`
+  });
+});
+</script>
+{% endblock %}
+

@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block title %}OrgDB HR{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+
+  <!-- Header -->
+  <div class="bg-white shadow-lg rounded-lg overflow-hidden mb-8 border border-gray-100">
+    <div class="bg-gradient-to-r from-blue-700 to-blue-600 px-6 py-10">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-white mb-2">
+          Human Resources
+        </h1>
+        <p class="text-blue-100 text-lg">
+          Personnel Records Interface
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu Cards -->
+  <div class="space-y-5">
+
+    <!-- Browse Personnel -->
+    <a href="{{ url_for('employee_browse') }}"
+       class="block bg-white shadow-md rounded-lg p-6 border border-gray-100
+              hover:shadow-lg hover:border-blue-200 transition">
+      <h2 class="text-xl font-semibold text-gray-800 mb-1">
+        Browse Personnel
+      </h2>
+      <p class="text-gray-600">
+        View and edit personnel records.
+      </p>
+    </a>
+
+    <!-- Manage Records -->
+    <a href="{{ url_for('tax_record_browse') }}"
+       class="block bg-white shadow-md rounded-lg p-6 border border-gray-100
+              hover:shadow-lg hover:border-blue-200 transition">
+      <h2 class="text-xl font-semibold text-gray-800 mb-1">
+        Manage Divisions
+      </h2>
+      <p class="text-gray-600">
+        Manage division records.
+      </p>
+    </a>
+
+  </div>
+</div>
+{% endblock %}
+

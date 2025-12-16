@@ -1,0 +1,40 @@
+{% macro entity_list(
+    id,
+    title,
+    empty_label="items",
+    empty_hint=""
+) %}
+<div
+  class="bg-white shadow-lg rounded-lg p-6 transition-all duration-300
+         hover:shadow-xl border border-gray-100"
+>
+  <h2 class="text-xl font-bold mb-4 text-gray-800 flex items-center">
+    <svg class="w-5 h-5 mr-2 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16" />
+    </svg>
+    {{ title }}
+  </h2>
+
+  <div id="{{ id }}"
+       class="space-y-3"
+       data-empty-label="{{ empty_label }}"
+       data-empty-hint="{{ empty_hint }}">
+
+    <!-- Loading placeholder -->
+    <div class="py-10 text-center text-gray-500 entity-loading">
+      <div class="flex justify-center items-center">
+        <svg class="animate-spin h-5 w-5 mr-3 text-blue-700" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10"
+                  stroke="currentColor" stroke-width="4"/>
+          <path class="opacity-75" fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+        </svg>
+        Loading…
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endmacro %}
+

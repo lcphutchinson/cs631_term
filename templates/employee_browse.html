@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% from "macros/entity_list.html" import entity_list %}
+
+{% block title %}Review Personnel{% endblock %}
+
+{% block content %}
+<div class="space-y-5">
+<!-- Register Employees -->
+    <a href="{{ url_for('employee_create') }}"
+       class="block bg-white shadow-md rounded-lg p-6 border border-gray-100
+              hover:shadow-lg hover:border-blue-200 transition">
+      <h2 class="text-xl font-semibold text-gray-800 mb-1">
+        Register Employees
+      </h2>
+      <p class="text-gray-600">
+        Add new personnel records to the system.
+      </p>
+    </a>
+</div>
+<br>
+
+<div class="max-w-4xl mx-auto">
+  {{ entity_list(
+      id="employeeList",
+      title="Personnel",
+      empty_label="employees",
+      empty_hint="Register your first employee to get started."
+  ) }}
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  OrgDB.loadEntityList({
+    containerId: 'employeeList',
+    apiUrl: '/api/employees',
+    title: e => `${e.l_name}, ${e.f_name}`,
+    subtitle: e => `${e.salary}`,
+    viewUrl: e => `/hrm/emp_detail/${e.num}`,
+    editUrl: e => `/employee/${e.num}/edit`
+  });
+});
+</script>
+{% endblock %}
+

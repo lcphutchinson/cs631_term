@@ -1,0 +1,224 @@
+{% extends "layout.html" %}
+{% block title %}Employee {{ employee.num }}{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto space-y-6">
+
+  <!-- Header / Identity Card -->
+  <div class="bg-white shadow-lg rounded-lg p-6 border border-gray-100">
+    <div class="flex justify-between items-start">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-800">
+            <span id="lNameSpan">{{ employee.l_name }}</span>, <span id="fNameSpan">{{ employee.f_name }}</span>
+            <span id="mNameSpan" class="text-gray-500 font-medium">{% if employee.m_name %}{{ employee.m_name }}{% endif %}</span>
+        </h1>
+
+        <p class="text-gray-600 mt-1">
+          Employee #{{ employee.num }}
+        </p>
+
+        <div class="mt-2 flex space-x-3 text-sm">
+          {% if employee.active %}
+          <span id="activitySpan" class="px-2 py-1 bg-green-100 text-green-700 rounded">
+            Active
+          </span>
+          {% else %}
+          <span id="activitySpan" class="px-2 py-1 bg-gray-200 text-gray-700 rounded">
+            Inactive
+          </span>{% endif %}
+          {% if employee.hourly %}
+          <span id="hourlySpan" class="px-2 py-1 bg-blue-100 text-blue-700 rounded">
+            Hourly
+          </span>
+          {% else %}
+          <span id="hourlySpan" class="px-2 py-1 bg-purple-100 text-purple-700 rounded">
+            Salaried
+          </span>{% endif %}
+          </span>
+        </div>
+      </div>
+
+      <button id="editIdButton" class="text-sm text-blue-700">
+          Edit
+      </button>
+
+    </div>
+  </div>
+
+  <!-- Main Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- Employee Info -->
+    <div class="bg-white shadow rounded-lg p-5 border border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">
+        Employee Information
+      </h2>
+
+      <dl class="space-y-2 text-sm">
+        <div class="flex justify-between">
+          <dt class="text-gray-500">Salary</dt>
+          <dd class="font-medium text-gray-800">
+            ${{ "%.2f"|format(employee.salary) }}
+          </dd>
+        </div>
+      </dl>
+    </div>
+
+    <!-- Address -->
+    <div class="bg-white shadow rounded-lg p-5 border border-gray-100">
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">
+        Address
+      </h2>
+
+      <p class="text-sm text-gray-700 leading-relaxed">
+        {{ employee.street }}<br>
+        {{ employee.city }}, {{ employee.state }} {{ employee.zip }}
+      </p>
+    </div>
+
+    <!-- Office -->
+    <div class="bg-white shadow rounded-lg p-5 border border-gray-100">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-lg font-semibold text-gray-800">
+          Office
+        </h2>
+        <button
+          class="text-sm text-blue-700"
+          onclick="OrgDB.openEditModal({
+          title: 'Edit Office',
+          endpoint: '/api/office/create',
+          fields: [
+            { name: 'employee', label: 'Employee #', type: 'hidden'},
+            { name: 'room', label: 'Room Number', type: 'number' },
+            { name: 'phone', label: 'Phone', type: 'text' }
+          ],
+          initialData: {
+            employee: '{{ employee.num }}',
+            room: '{{ employee.room }}',
+            phone: '{{ employee.phone }}'
+          },
+          onSuccess: data => {
+            document.getElementById('officeRoom').textContent = data.room;
+            document.getElementById('officePhone').textContent = data.phone;
+          }
+          })">
+          Edit
+      </button>
+      </div>
+
+      {% if employee.room %}
+        <dl class="space-y-2 text-sm">
+          <div class="flex justify-between">
+            <dt class="text-gray-500">Room</dt>
+            <dd class="font-medium text-gray-800">
+              {{ employee.room }}
+            </dd>
+          </div>
+          <div class="flex justify-between">
+            <dt class="text-gray-500">Phone</dt>
+            <dd class="font-medium text-gray-800">
+              {{ employee.phone }}
+            </dd>
+          </div>
+        </dl>
+      {% else %}
+        <p class="text-sm text-gray-500 italic">
+          No office assigned
+        </p>
+      {% endif %}
+    </div>
+
+    <!-- Affiliation -->
+    <div class="bg-white shadow rounded-lg p-5 border border-gray-100">
+      <div class="flex justify-between items-center mb-3">
+        <h2 class="text-lg font-semibold text-gray-800">
+          {% if employee.aff_type == "division" %}
+            <span id="affSpan">Division</span>
+          {% else %}
+            <span id="affSpan">Department</span>
+          {% endif %}
+        </h2>
+        <button
+          class="text-sm text-blue-700 hover:text-blue-800"
+          id="editAffiliationBtn"
+        >
+          Change
+        </button>
+      </div>
+
+      <p class="text-sm font-medium text-gray-800">
+        {{ employee.aff_name }}
+      </p>
+    </div>
+
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script>
+    document.getElementById('editAffiliationBtn').addEventListener('click', () => {
+        OrgDB.openEditModal({
+          title: 'Edit Affiliation',
+          endpoint: '/api/affiliation/create',
+          fields: [
+            { name: 'employee', label: 'Employee #', type: 'hidden' },
+            { name: 'division', label: 'Division', type: 'radio' },
+            { name: 'department', label: 'Department', type: 'radio' },
+            { name: 'aff_id', label: 'Id', type: 'text' }, 
+          ],
+          initialData: {
+            employee: {{ employee.num | tojson }},
+            division: false,
+            department: false,
+            aff_id: "",
+          },
+          onSuccess: data => {
+             if ('division' in data) {
+                 document.getElementById('affSpan').textContent = "Division";
+             } if ('department' in data) {
+                 document.getElementById('affSpan').textContent = "Department";
+             }
+             /// Add some subtitle text under affSpan to use data.Id
+          }
+        });
+    });
+    document.getElementById('editIdButton').addEventListener('click', () => {
+        OrgDB.openEditModal({
+          title: 'Edit Identity',
+          endpoint: '/api/employee/{{ employee.num }}/edit',
+          fields: [
+            { name: 'f_name', label: 'First Name', type: 'text' },
+            { name: 'm_name', label: 'Middle Name (Optional)', type: 'text' },
+            { name: 'l_name', label: 'Last Name', type: 'text' },
+            { name: 'active', label: 'Working', type: 'checkbox' },
+            { name: 'hourly', label: 'Hourly', type: 'checkbox' },
+          ],
+          initialData: {
+
+            m_name: {{ employee.m_name | tojson }},
+            l_name: {{ employee.l_name | tojson }},
+            active: {{ employee.active | tojson }},
+            hourly: {{ employee.hourly | tojson }},
+          },
+          onSuccess: data => {
+            if ('f_name' in data) {
+                document.getElementById('fNameSpan').textContent = data.f_name;
+            } if ('m_name' in data) {
+                document.getElementById('mNameSpan').textContent = data.m_name;
+            } if ('l_name' in data) {
+                document.getElementById('lNameSpan').textContent = data.l_name;
+            }
+
+            const activitySpan = document.getElementById('activitySpan');
+            activitySpan.className = 'active' in data
+                ? 'px-2 py-1 bg-green-100 text-green-700 rounded'
+                : 'px-2 py-1 bg-gray-200 text-gray-700 rounded';
+            const hourlySpan = document.getElementById('hourlySpan');
+            activitySpan.className = 'hourly' in data
+                ? 'px-2 py-1 bg-blue-100 text-blue-700 rounded'
+                : 'px-2 py-1 bg-purple-100 text-purple-700 rounded';
+          }
+        });
+    });
+</script>
+{% endblock %}
